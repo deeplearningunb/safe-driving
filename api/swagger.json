@@ -1,0 +1,90 @@
+swagger: "2.0"
+info:
+  description: "API for Safe Driving"
+  version: "1.0.0"
+  title: "Safe Driving Service"
+  license:
+    name: "MIT 2.0"
+    url: "https://opensource.org/licenses/MIT"
+basePath: "/v1/safe-driving"
+schemes:
+  - "http"
+tags:
+  - name: SafeDriving
+paths:
+  '/predictions':
+    post:
+      summary: "Predict the likelihood of an accident happening"
+      description: "Predict the likelihood of an accident happening"
+      tags:
+        - SafeDriving
+      operationId: "predict"
+      produces:
+        - "application/json"
+      parameters:
+        - name: predictForCreate
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/PredictForCreate'
+      responses:
+        '200':
+          description: 'Prediction performed successfully'
+          schema:
+            $ref: '#/definitions/PredictForResponse'
+        '500':
+          description: Unexpected error
+          examples:
+            application/json:
+              code: UNEXPECTED_ERROR
+              message: "Internal server error"
+              details: ["Internal server error"]
+definitions:
+  PredictForCreate:
+    type: 'object'
+    description: 'Structure used to create Predection'
+    properties:
+      date:
+        description: 'Year/Month/Day'
+        example: '2020-11-09'
+        type: string
+      day-week:
+        description: 'Day of the week'
+        example: 'terça-feira'
+        type: string
+      hour:
+        description: 'Hour of the day'
+        example: '13:30:00'
+        type: string
+      uf:
+        description: 'Federative unit'
+        example: 'SP'
+        type: string
+      br:
+        description: 'Road Numbering'
+        example: 101
+        type: number
+      km:
+        description: 'Kilometer from the road'
+        example: 343
+        type: number
+      weather:
+        description: 'Weather condition'
+        example: 'Nublado'
+        type: string
+      latitude:
+        description: 'Latitude'
+        example: '-28.5197545'
+        type: string
+      longitude:
+        description: 'Longitude'
+        example: '-49.0560047'
+        type: string
+  PredictForResponse:
+    type: 'object'
+    description: 'Structure used to response Predection'
+    properties:
+      probability:
+        description: 'Probability'
+        example: 54.7
+        type: number
